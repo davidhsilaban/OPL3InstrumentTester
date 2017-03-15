@@ -26,8 +26,15 @@ namespace OPL3FMInstrumentTester
 
         private void previewInstrumentToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (previewForm.IsDisposed) previewForm = new PreviewForm();
-            previewForm.Show();
+            if (previewForm.IsDisposed)
+            {
+                previewForm = new PreviewForm();
+            }
+
+            if (!previewForm.Visible)
+            {
+                previewForm.Show(this);
+            }
         }
     }
 }
