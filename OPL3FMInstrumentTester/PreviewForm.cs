@@ -27,24 +27,16 @@ namespace OPL3FMInstrumentTester
             synth = new FMSynth();
             waveOut = new WinMMWaveOut(2, 44100, 16);
             waveOut.Open();
-
-            lock (renderingLock)
-            {
-                isRendering = true;
-                Monitor.Pulse(renderingLock);
-            }
-
-            synthThread = new Thread(SynthProcessingThread);
-            synthThread.Start();
         }
 
         private void SynthProcessingThread()
         {
             while (isRendering)
             {
-                short[] buffer = new short[1024];
-                synth.getsample(buffer, 1024);
-                Debug.Write(buffer.Length);
+                short[] buffer = new short[44100*2];
+                synth.getsample(buffer, 44100);
+                Debug.WriteLine(buffer[0]);
+                Thread.Sleep(100);
             }
         }
 
@@ -56,6 +48,18 @@ namespace OPL3FMInstrumentTester
                 Monitor.Pulse(renderingLock);
                 waveOut.Close();
             }
+        }
+
+        private void PreviewForm_Load(object sender, EventArgs e)
+        {
+            lock (renderingLock)
+            {
+                isRendering = true;
+                Monitor.Pulse(renderingLock);
+            }
+
+            synthThread = new Thread(SynthProcessingThread);
+            synthThread.Start();
         }
     }
 }
