@@ -10,11 +10,11 @@ using System.Windows.Forms;
 
 namespace OPL3FMInstrumentTester
 {
-    public partial class mainForm : Form
+    public partial class MainForm : Form
     {
         PreviewForm previewForm = new PreviewForm();
 
-        public mainForm()
+        public MainForm()
         {
             InitializeComponent();
         }
