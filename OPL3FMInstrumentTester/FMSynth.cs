@@ -16,7 +16,7 @@ namespace OPL3FMInstrumentTester
         private static extern void FMSynth_write(uint index, byte val);
 
         [DllImport("FMSynthDLL.dll")]
-        private static extern void FMSynth_getsample(short[] sndptr, int numsamples);
+        private static extern void FMSynth_getsample(IntPtr sndptr, int numsamples);
 
         public FMSynth()
         {
@@ -30,7 +30,12 @@ namespace OPL3FMInstrumentTester
 
         public void getsample(short[] sndptr, int numsamples)
         {
-            FMSynth_getsample(sndptr, numsamples);
+            //short[] sampleData = new short[numsamples];
+            IntPtr samplePtr = Marshal.AllocHGlobal(numsamples*sizeof(short));
+            FMSynth_getsample(samplePtr, numsamples);
+            Marshal.Copy(samplePtr, sndptr, 0, numsamples);
+            Marshal.FreeHGlobal(samplePtr);
+            //sndptr = sampleData;
         }
     }
 }
