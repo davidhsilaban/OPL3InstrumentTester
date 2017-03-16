@@ -189,6 +189,7 @@ namespace OPL3FMInstrumentTester
 
         public void Write(short[] samples)
         {
+            /* TODO: Implement buffering scheme */
             lock (waveOpenCloseLock)
             {
                 IntPtr data = Marshal.AllocHGlobal(samples.Length * sizeof(short));
