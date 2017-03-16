@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace OPL3FMInstrumentTester
@@ -23,6 +24,16 @@ namespace OPL3FMInstrumentTester
         WAVERR_SYNC = 32 + 3
     }
 
+    [Flags]
+    public enum WAVEHDRFlags
+    {
+        WHDR_DONE = 0x00000001,
+        WHDR_PREPARED = 0x00000002,
+        WHDR_BEGINLOOP = 0x00000004,
+        WHDR_ENDLOOP = 0x00000008,
+        WHDR_INQUEUE = 0x00000010
+    }
+
     [StructLayout(LayoutKind.Sequential)]
     public struct WAVEFORMATEX
     {
@@ -33,6 +44,19 @@ namespace OPL3FMInstrumentTester
         public UInt16 nBlockAlign;
         public UInt16 wBitsPerSample;
         public UInt16 cbSize;
+    }
+
+    [StructLayout(LayoutKind.Sequential)]
+    public struct WAVEHDR
+    {
+        public IntPtr lpData;
+        public UInt32 dwBufferLength;
+        public UInt32 dwBytesRecorded;
+        public IntPtr dwUser;
+        public WAVEHDRFlags dwFlags;
+        public UInt32 dwLoops;
+        public IntPtr lpNext;
+        public IntPtr reserved;
     }
 
     [Flags]
@@ -52,6 +76,13 @@ namespace OPL3FMInstrumentTester
         WAVE_MAPPED_DEFAULT_COMMUNICATION_DEVICE = 0x0010
     }
 
+    public enum WaveOutMessages
+    {
+        WOM_OPEN = 0x03BB,
+        WOM_CLOSE = 0x03BC,
+        WOM_DONE = 0x03BD
+    }
+
     public enum WaveFormats
     {
         WAVE_FORMAT_PCM = 1
@@ -61,15 +92,31 @@ namespace OPL3FMInstrumentTester
     {
         public const UInt32 WAVE_MAPPER = unchecked((uint)-1);
 
-        public delegate void waveOutProc(IntPtr hWaveOut, UInt32 uMsg, UIntPtr dwInstance, UIntPtr dwParam1, UIntPtr dwParam2);
+        public delegate void WaveOutProc(IntPtr hWaveOut, WaveOutMessages uMsg, IntPtr dwInstance, IntPtr dwParam1, IntPtr dwParam2);
 
         [DllImport("winmm.dll")]
-        private static extern WAVEERROR waveOutOpen(out IntPtr hWaveOut, UInt32 uDeviceID, ref WAVEFORMATEX wfx, waveOutProc dwCallback, UIntPtr dwInstance, WaveOutFlags fdwOpen);
+        private static extern WAVEERROR waveOutOpen(out IntPtr hWaveOut, UInt32 uDeviceID, ref WAVEFORMATEX wfx, WaveOutProc dwCallback, UIntPtr dwInstance, WaveOutFlags fdwOpen);
 
         [DllImport("winmm.dll")]
         private static extern WAVEERROR waveOutClose(IntPtr hWaveOut);
 
+        [DllImport("winmm.dll")]
+        private static extern WAVEERROR waveOutPrepareHeader(IntPtr hWaveOut, IntPtr pwh, UInt32 cbwh);
+
+        [DllImport("winmm.dll")]
+        private static extern WAVEERROR waveOutUnprepareHeader(IntPtr hWaveOut, IntPtr pwh, UInt32 cbwh);
+
+        [DllImport("winmm.dll")]
+        private static extern WAVEERROR waveOutWrite(IntPtr hWaveOut, IntPtr pwh, UInt32 cbwh);
+
         private IntPtr hWaveOut;
+
+        private WaveOutProc callbackProc;
+
+        private Thread bufferMonitorThread;
+        private Queue<IntPtr> bufferReleaseQueue = new Queue<IntPtr>();
+        private bool isActive;
+        private object bufferLock = new object();
 
         private int channels = 1, frequency = 44100, bits = 16;
 
@@ -93,7 +140,12 @@ namespace OPL3FMInstrumentTester
             waveFormatEx.nBlockAlign = (ushort)(waveFormatEx.nChannels * (waveFormatEx.wBitsPerSample / 8));
             waveFormatEx.nAvgBytesPerSec = waveFormatEx.nSamplesPerSec * waveFormatEx.nBlockAlign;
             waveFormatEx.cbSize = 0;
-            Debug.WriteLine(waveOutOpen(out hWaveOut, WAVE_MAPPER, ref waveFormatEx, null, UIntPtr.Zero, WaveOutFlags.CALLBACK_FUNCTION));
+
+            callbackProc = new WaveOutProc(WaveOutCallback);
+
+            bufferMonitorThread = new Thread(BufferMonitor);
+
+            Debug.WriteLine(waveOutOpen(out hWaveOut, WAVE_MAPPER, ref waveFormatEx, callbackProc, UIntPtr.Zero, WaveOutFlags.CALLBACK_FUNCTION));
             Debug.WriteLine("hWaveOut: "+hWaveOut.ToString());
         }
 
@@ -109,6 +161,60 @@ namespace OPL3FMInstrumentTester
                 Debug.WriteLine("Closing WaveOut");
                 waveOutClose(hWaveOut);
             }
+        }
+
+        private void WaveOutCallback(IntPtr hWaveOut, WaveOutMessages uMsg, IntPtr dwInstance, IntPtr dwParam1, IntPtr dwParam2)
+        {
+            Debug.WriteLine(uMsg);
+            switch (uMsg)
+            {
+                case WaveOutMessages.WOM_DONE:
+                    //WAVEHDR waveHdr = (WAVEHDR)Marshal.PtrToStructure(dwParam1, typeof(WAVEHDR));
+                    lock (bufferLock)
+                    {
+                        bufferReleaseQueue.Enqueue(dwParam1);
+                        Monitor.Pulse(bufferLock);
+                    }
+                    break;
+            }
+        }
+
+        private void BufferMonitor()
+        {
+            while (isActive)
+            {
+                lock (bufferLock)
+                {
+                    while (bufferReleaseQueue.Count == 0)
+                    {
+                        Monitor.Wait(bufferLock, 1000);
+                    }
+                }
+
+                while (bufferReleaseQueue.Count > 0)
+                {
+                    ReleaseBuffer();
+                }
+            }
+        }
+
+        private void ReleaseBuffer()
+        {
+            IntPtr headerPtr;
+
+            lock (bufferLock)
+            {
+                headerPtr = bufferReleaseQueue.Dequeue();
+                Monitor.Pulse(bufferLock);
+            }
+
+            WAVEHDR pwh = (WAVEHDR)Marshal.PtrToStructure(headerPtr, typeof(WAVEHDR));
+            IntPtr data = pwh.lpData;
+
+            waveOutUnprepareHeader(hWaveOut, headerPtr, (uint)Marshal.SizeOf(typeof(WAVEHDR)));
+
+            Marshal.FreeHGlobal(data);
+            Marshal.FreeHGlobal(headerPtr);
         }
 
         protected void Dispose(bool disposing)
