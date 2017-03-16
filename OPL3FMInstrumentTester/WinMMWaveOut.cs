@@ -117,6 +117,7 @@ namespace OPL3FMInstrumentTester
         private Queue<IntPtr> bufferReleaseQueue = new Queue<IntPtr>();
         private bool isActive;
         private object bufferLock = new object();
+        private object waveOpenCloseLock = new object();
 
         private int channels = 1, frequency = 44100, bits = 16;
 
@@ -130,23 +131,34 @@ namespace OPL3FMInstrumentTester
 
         public void Open()
         {
-            if (hWaveOut != IntPtr.Zero) return;
+            lock (waveOpenCloseLock)
+            {
+                if (hWaveOut != IntPtr.Zero) return;
 
-            WAVEFORMATEX waveFormatEx = new WAVEFORMATEX();
-            waveFormatEx.wFormatTag = (ushort)WaveFormats.WAVE_FORMAT_PCM;
-            waveFormatEx.nChannels = (ushort)this.channels;
-            waveFormatEx.nSamplesPerSec = (uint)this.frequency;
-            waveFormatEx.wBitsPerSample = (ushort)this.bits;
-            waveFormatEx.nBlockAlign = (ushort)(waveFormatEx.nChannels * (waveFormatEx.wBitsPerSample / 8));
-            waveFormatEx.nAvgBytesPerSec = waveFormatEx.nSamplesPerSec * waveFormatEx.nBlockAlign;
-            waveFormatEx.cbSize = 0;
+                WAVEFORMATEX waveFormatEx = new WAVEFORMATEX();
+                waveFormatEx.wFormatTag = (ushort)WaveFormats.WAVE_FORMAT_PCM;
+                waveFormatEx.nChannels = (ushort)this.channels;
+                waveFormatEx.nSamplesPerSec = (uint)this.frequency;
+                waveFormatEx.wBitsPerSample = (ushort)this.bits;
+                waveFormatEx.nBlockAlign = (ushort)(waveFormatEx.nChannels * (waveFormatEx.wBitsPerSample / 8));
+                waveFormatEx.nAvgBytesPerSec = waveFormatEx.nSamplesPerSec * waveFormatEx.nBlockAlign;
+                waveFormatEx.cbSize = 0;
 
-            callbackProc = new WaveOutProc(WaveOutCallback);
+                Debug.WriteLine(waveOutOpen(out hWaveOut, WAVE_MAPPER, ref waveFormatEx, callbackProc, UIntPtr.Zero, WaveOutFlags.CALLBACK_FUNCTION));
+                Debug.WriteLine("hWaveOut: " + hWaveOut.ToString());
 
-            bufferMonitorThread = new Thread(BufferMonitor);
+                callbackProc = new WaveOutProc(WaveOutCallback);
 
-            Debug.WriteLine(waveOutOpen(out hWaveOut, WAVE_MAPPER, ref waveFormatEx, callbackProc, UIntPtr.Zero, WaveOutFlags.CALLBACK_FUNCTION));
-            Debug.WriteLine("hWaveOut: "+hWaveOut.ToString());
+                lock (bufferLock)
+                {
+                    isActive = true;
+                    Monitor.Pulse(bufferLock);
+                }
+
+                bufferMonitorThread = new Thread(BufferMonitor);
+                bufferMonitorThread.IsBackground = true;
+                bufferMonitorThread.Start();
+            }
         }
 
         ~WinMMWaveOut()
@@ -156,10 +168,42 @@ namespace OPL3FMInstrumentTester
 
         public void Close()
         {
-            if (hWaveOut != null)
+            lock (waveOpenCloseLock)
             {
-                Debug.WriteLine("Closing WaveOut");
-                waveOutClose(hWaveOut);
+                if (hWaveOut != null)
+                {
+                    Debug.WriteLine("Closing WaveOut");
+
+                    lock (bufferLock)
+                    {
+                        isActive = false;
+                        Monitor.Pulse(bufferLock);
+                    }
+
+                    bufferMonitorThread.Join();
+
+                    waveOutClose(hWaveOut);
+                }
+            }
+        }
+
+        public void Write(short[] samples)
+        {
+            lock (waveOpenCloseLock)
+            {
+                IntPtr data = Marshal.AllocHGlobal(samples.Length * sizeof(short));
+                Marshal.Copy(samples, 0, data, samples.Length);
+
+                WAVEHDR pwh = new WAVEHDR();
+                pwh.lpData = data;
+                pwh.dwBufferLength = (uint)samples.Length * sizeof(short);
+                pwh.dwFlags = 0;
+
+                IntPtr pwhHeader = Marshal.AllocHGlobal(Marshal.SizeOf(pwh));
+                Marshal.StructureToPtr(pwh, pwhHeader, false);
+
+                waveOutPrepareHeader(hWaveOut, pwhHeader, (uint)Marshal.SizeOf(typeof(WAVEHDR)));
+                waveOutWrite(hWaveOut, pwhHeader, (uint)Marshal.SizeOf(typeof(WAVEHDR)));
             }
         }
 
@@ -185,8 +229,9 @@ namespace OPL3FMInstrumentTester
             {
                 lock (bufferLock)
                 {
-                    while (bufferReleaseQueue.Count == 0)
+                    while (bufferReleaseQueue.Count == 0 && isActive)
                     {
+                        Debug.WriteLine("Wait");
                         Monitor.Wait(bufferLock, 1000);
                     }
                 }
