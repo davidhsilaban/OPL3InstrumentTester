@@ -47,6 +47,8 @@
             resources.ApplyResources(this.buttonSingleNote, "buttonSingleNote");
             this.buttonSingleNote.Name = "buttonSingleNote";
             this.buttonSingleNote.UseVisualStyleBackColor = true;
+            this.buttonSingleNote.MouseDown += new System.Windows.Forms.MouseEventHandler(this.buttonSingleNote_MouseDown);
+            this.buttonSingleNote.MouseUp += new System.Windows.Forms.MouseEventHandler(this.buttonSingleNote_MouseUp);
             // 
             // buttonCMajorChord
             // 
