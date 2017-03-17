@@ -29,11 +29,13 @@ namespace OPL3 {
 
 FMSYNTHDLL_API void __stdcall FMSynth_init(OPL3::Bit32u samplerate)
 {
+	OutputDebugString(L"Adlib init\n");
 	OPL3::adlib_init(samplerate);
 }
 
 FMSYNTHDLL_API void __stdcall FMSynth_write(OPL3::Bitu index, OPL3::Bit8u val)
 {
+	//OutputDebugString(L"Adlib write\n");
 	OPL3::adlib_write(index, val);
 }
 

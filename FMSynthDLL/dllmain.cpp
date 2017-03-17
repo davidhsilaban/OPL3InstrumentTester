@@ -14,6 +14,10 @@ BOOL APIENTRY DllMain( HMODULE hModule,
 	case DLL_PROCESS_DETACH:
 		break;
 	}
+	
+	WCHAR str[50] = L"";
+	wsprintf(str, L"hModule: %x", hModule);
+	OutputDebugString(str);
 	return TRUE;
 }
 
