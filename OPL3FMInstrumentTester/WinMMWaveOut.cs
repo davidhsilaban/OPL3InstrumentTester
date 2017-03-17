@@ -11,7 +11,7 @@ namespace OPL3FMInstrumentTester
 {
     public enum WAVEERROR
     {
-        //MMSYSERR_BASE = 0,
+        MMSYSERR_BASE = 0,
         MMSYSERR_BADDEVICEID = 0 + 2,
         MMSYSERR_ALLOCATED = 0 + 4,
         MMSYSERR_INVALHANDLE = 0 + 5,
@@ -101,6 +101,9 @@ namespace OPL3FMInstrumentTester
         private static extern WAVEERROR waveOutClose(IntPtr hWaveOut);
 
         [DllImport("winmm.dll")]
+        private static extern WAVEERROR waveOutReset(IntPtr hWaveOut);
+
+        [DllImport("winmm.dll")]
         private static extern WAVEERROR waveOutPrepareHeader(IntPtr hWaveOut, IntPtr pwh, UInt32 cbwh);
 
         [DllImport("winmm.dll")]
@@ -144,10 +147,10 @@ namespace OPL3FMInstrumentTester
                 waveFormatEx.nAvgBytesPerSec = waveFormatEx.nSamplesPerSec * waveFormatEx.nBlockAlign;
                 waveFormatEx.cbSize = 0;
 
+                callbackProc = new WaveOutProc(WaveOutCallback);
+
                 Debug.WriteLine(waveOutOpen(out hWaveOut, WAVE_MAPPER, ref waveFormatEx, callbackProc, UIntPtr.Zero, WaveOutFlags.CALLBACK_FUNCTION));
                 Debug.WriteLine("hWaveOut: " + hWaveOut.ToString());
-
-                callbackProc = new WaveOutProc(WaveOutCallback);
 
                 lock (bufferLock)
                 {
@@ -174,6 +177,11 @@ namespace OPL3FMInstrumentTester
                 {
                     Debug.WriteLine("Closing WaveOut");
 
+                    lock (waveOpenCloseLock)
+                    {
+                        waveOutReset(hWaveOut);
+                    }
+
                     lock (bufferLock)
                     {
                         isActive = false;
@@ -182,7 +190,7 @@ namespace OPL3FMInstrumentTester
 
                     bufferMonitorThread.Join();
 
-                    waveOutClose(hWaveOut);
+                    Debug.WriteLine(waveOutClose(hWaveOut));
                 }
             }
         }
@@ -205,12 +213,17 @@ namespace OPL3FMInstrumentTester
 
                 waveOutPrepareHeader(hWaveOut, pwhHeader, (uint)Marshal.SizeOf(typeof(WAVEHDR)));
                 waveOutWrite(hWaveOut, pwhHeader, (uint)Marshal.SizeOf(typeof(WAVEHDR)));
+
+                //while (bufferReleaseQueue.Count > 0)
+                //{
+                //    ReleaseBuffer();
+                //}
             }
         }
 
         private void WaveOutCallback(IntPtr hWaveOut, WaveOutMessages uMsg, IntPtr dwInstance, IntPtr dwParam1, IntPtr dwParam2)
         {
-            Debug.WriteLine(uMsg);
+            //Debug.WriteLine(uMsg);
             switch (uMsg)
             {
                 case WaveOutMessages.WOM_DONE:
@@ -226,19 +239,20 @@ namespace OPL3FMInstrumentTester
 
         private void BufferMonitor()
         {
-            while (isActive)
+            while (isActive || bufferReleaseQueue.Count > 0)
             {
                 lock (bufferLock)
                 {
                     while (bufferReleaseQueue.Count == 0 && isActive)
                     {
                         Debug.WriteLine("Wait");
-                        Monitor.Wait(bufferLock, 1000);
+                        Monitor.Wait(bufferLock, 10);
                     }
                 }
 
                 while (bufferReleaseQueue.Count > 0)
                 {
+                    Debug.WriteLine("ReleaseBuffer");
                     ReleaseBuffer();
                 }
             }
@@ -247,6 +261,8 @@ namespace OPL3FMInstrumentTester
         private void ReleaseBuffer()
         {
             IntPtr headerPtr;
+
+            Debug.WriteLine(bufferReleaseQueue.Count);
 
             lock (bufferLock)
             {
@@ -257,7 +273,7 @@ namespace OPL3FMInstrumentTester
             WAVEHDR pwh = (WAVEHDR)Marshal.PtrToStructure(headerPtr, typeof(WAVEHDR));
             IntPtr data = pwh.lpData;
 
-            waveOutUnprepareHeader(hWaveOut, headerPtr, (uint)Marshal.SizeOf(typeof(WAVEHDR)));
+            Debug.WriteLine(waveOutUnprepareHeader(hWaveOut, headerPtr, (uint)Marshal.SizeOf(typeof(WAVEHDR))));
 
             Marshal.FreeHGlobal(data);
             Marshal.FreeHGlobal(headerPtr);
