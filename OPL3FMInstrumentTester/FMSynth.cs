@@ -33,7 +33,7 @@ namespace OPL3FMInstrumentTester
             //short[] sampleData = new short[numsamples];
             IntPtr samplePtr = Marshal.AllocHGlobal(numsamples*sizeof(short)*2);
             FMSynth_getsample(samplePtr, numsamples);
-            Marshal.Copy(samplePtr, sndptr, 0, numsamples);
+            Marshal.Copy(samplePtr, sndptr, 0, sndptr.Length);
             Marshal.FreeHGlobal(samplePtr);
             //sndptr = sampleData;
         }
