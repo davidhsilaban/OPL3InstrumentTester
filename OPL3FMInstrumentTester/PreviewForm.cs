@@ -19,6 +19,8 @@ namespace OPL3FMInstrumentTester
         private Thread synthThread;
         private bool isRendering;
         private object renderingLock = new object();
+        private bool soundOn;
+        private Stopwatch watch = new Stopwatch();
 
         public PreviewForm()
         {
@@ -33,11 +35,17 @@ namespace OPL3FMInstrumentTester
         {
             while (isRendering)
             {
-                short[] buffer = new short[44100*2];
-                synth.getsample(buffer, 44100);
-                //Debug.WriteLine(buffer[0]);
+                short[] buffer = new short[4410*2];
+                Stopwatch stopwatch = new Stopwatch();
+                stopwatch.Start();
+                synth.getsample(buffer, 4410);
+                stopwatch.Stop();
+                //Debug.WriteLine("Render " + stopwatch.ElapsedMilliseconds);
+                stopwatch.Restart();
                 waveOut.Write(buffer);
-                Thread.Sleep(100);
+                stopwatch.Stop();
+                //Debug.WriteLine("Write " + stopwatch.ElapsedMilliseconds);
+                Thread.Sleep(1);
             }
         }
 
@@ -109,6 +117,8 @@ namespace OPL3FMInstrumentTester
         {
             lock (renderingLock)
             {
+                timer1.Enabled = false;
+
                 isRendering = false;
                 Monitor.Pulse(renderingLock);
                 waveOut.Close();
@@ -125,6 +135,8 @@ namespace OPL3FMInstrumentTester
 
             synthThread = new Thread(SynthProcessingThread);
             synthThread.Start();
+
+            timer1.Enabled = true;
         }
 
         private void buttonSingleNote_MouseDown(object sender, MouseEventArgs e)
@@ -136,6 +148,41 @@ namespace OPL3FMInstrumentTester
         private void buttonSingleNote_MouseUp(object sender, MouseEventArgs e)
         {            
             SoundOffSingleNote();
+        }
+
+        private void buttonSingleNote_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Space)
+            {
+                buttonSingleNote_MouseDown(sender, null);
+            }
+        }
+
+        private void buttonSingleNote_KeyUp(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Space)
+            {
+                buttonSingleNote_MouseUp(sender, null);
+            }
+        }
+
+        private void timer1_Tick(object sender, EventArgs e)
+        {
+            soundOn = !soundOn;
+            if (soundOn)
+            {
+                watch.Restart();
+                SetupFMParameters();
+                SoundOnSingleNote();
+                watch.Stop();
+                Debug.WriteLine("On: " + watch.ElapsedMilliseconds);
+            } else
+            {
+                watch.Restart();
+                SoundOffSingleNote();
+                watch.Stop();
+                Debug.WriteLine("Off: " + watch.ElapsedMilliseconds);
+            }
         }
     }
 }

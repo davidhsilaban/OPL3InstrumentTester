@@ -28,10 +28,12 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(PreviewForm));
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.buttonSingleNote = new System.Windows.Forms.Button();
             this.buttonCMajorChord = new System.Windows.Forms.Button();
+            this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.tableLayoutPanel1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -47,6 +49,8 @@
             resources.ApplyResources(this.buttonSingleNote, "buttonSingleNote");
             this.buttonSingleNote.Name = "buttonSingleNote";
             this.buttonSingleNote.UseVisualStyleBackColor = true;
+            this.buttonSingleNote.KeyDown += new System.Windows.Forms.KeyEventHandler(this.buttonSingleNote_KeyDown);
+            this.buttonSingleNote.KeyUp += new System.Windows.Forms.KeyEventHandler(this.buttonSingleNote_KeyUp);
             this.buttonSingleNote.MouseDown += new System.Windows.Forms.MouseEventHandler(this.buttonSingleNote_MouseDown);
             this.buttonSingleNote.MouseUp += new System.Windows.Forms.MouseEventHandler(this.buttonSingleNote_MouseUp);
             // 
@@ -55,6 +59,11 @@
             resources.ApplyResources(this.buttonCMajorChord, "buttonCMajorChord");
             this.buttonCMajorChord.Name = "buttonCMajorChord";
             this.buttonCMajorChord.UseVisualStyleBackColor = true;
+            // 
+            // timer1
+            // 
+            this.timer1.Interval = 1000;
+            this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
             // 
             // PreviewForm
             // 
@@ -77,5 +86,6 @@
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
         private System.Windows.Forms.Button buttonSingleNote;
         private System.Windows.Forms.Button buttonCMajorChord;
+        private System.Windows.Forms.Timer timer1;
     }
 }
