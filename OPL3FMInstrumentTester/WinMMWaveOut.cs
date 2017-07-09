@@ -11,7 +11,7 @@ namespace OPL3FMInstrumentTester
 {
     public enum WAVEERROR
     {
-        MMSYSERR_BASE = 0,
+        //MMSYSERR_BASE = 0,
         MMSYSERR_BADDEVICEID = 0 + 2,
         MMSYSERR_ALLOCATED = 0 + 4,
         MMSYSERR_INVALHANDLE = 0 + 5,
@@ -211,8 +211,8 @@ namespace OPL3FMInstrumentTester
                 IntPtr pwhHeader = Marshal.AllocHGlobal(Marshal.SizeOf(pwh));
                 Marshal.StructureToPtr(pwh, pwhHeader, false);
 
-                waveOutPrepareHeader(hWaveOut, pwhHeader, (uint)Marshal.SizeOf(typeof(WAVEHDR)));
-                waveOutWrite(hWaveOut, pwhHeader, (uint)Marshal.SizeOf(typeof(WAVEHDR)));
+                Debug.WriteLine(waveOutPrepareHeader(hWaveOut, pwhHeader, (uint)Marshal.SizeOf(typeof(WAVEHDR))));
+                Debug.WriteLine(waveOutWrite(hWaveOut, pwhHeader, (uint)Marshal.SizeOf(typeof(WAVEHDR))));
 
                 //while (bufferReleaseQueue.Count > 0)
                 //{
@@ -228,10 +228,11 @@ namespace OPL3FMInstrumentTester
             {
                 case WaveOutMessages.WOM_DONE:
                     //WAVEHDR waveHdr = (WAVEHDR)Marshal.PtrToStructure(dwParam1, typeof(WAVEHDR));
-                    lock (bufferLock)
+                    lock (this.bufferLock)
                     {
-                        bufferReleaseQueue.Enqueue(dwParam1);
-                        Monitor.Pulse(bufferLock);
+                        Debug.WriteLine("Done");
+                        this.bufferReleaseQueue.Enqueue(dwParam1);
+                        Monitor.Pulse(this.bufferLock);
                     }
                     break;
             }
@@ -239,20 +240,20 @@ namespace OPL3FMInstrumentTester
 
         private void BufferMonitor()
         {
-            while (isActive || bufferReleaseQueue.Count > 0)
+            while (this.isActive || this.bufferReleaseQueue.Count > 0)
             {
-                lock (bufferLock)
+                lock (this.bufferLock)
                 {
-                    while (bufferReleaseQueue.Count == 0 && isActive)
+                    while (this.bufferReleaseQueue.Count == 0 && isActive)
                     {
-                        Debug.WriteLine("Wait");
-                        Monitor.Wait(bufferLock, 10);
+                        Debug.WriteLine("BufferWait");
+                        Monitor.Wait(this.bufferLock, 100);
                     }
                 }
 
-                while (bufferReleaseQueue.Count > 0)
+                while (this.bufferReleaseQueue.Count > 0)
                 {
-                    Debug.WriteLine("ReleaseBuffer");
+                    Debug.WriteLine("ReleaseBuffer "+this.bufferReleaseQueue.Count);
                     ReleaseBuffer();
                 }
             }
@@ -262,12 +263,12 @@ namespace OPL3FMInstrumentTester
         {
             IntPtr headerPtr;
 
-            Debug.WriteLine(bufferReleaseQueue.Count);
+            Debug.WriteLine("BufferReleaseCount: "+this.bufferReleaseQueue.Count);
 
-            lock (bufferLock)
+            lock (this.bufferLock)
             {
-                headerPtr = bufferReleaseQueue.Dequeue();
-                Monitor.Pulse(bufferLock);
+                headerPtr = this.bufferReleaseQueue.Dequeue();
+                Monitor.Pulse(this.bufferLock);
             }
 
             WAVEHDR pwh = (WAVEHDR)Marshal.PtrToStructure(headerPtr, typeof(WAVEHDR));
