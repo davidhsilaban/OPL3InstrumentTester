@@ -59,6 +59,10 @@
             resources.ApplyResources(this.buttonCMajorChord, "buttonCMajorChord");
             this.buttonCMajorChord.Name = "buttonCMajorChord";
             this.buttonCMajorChord.UseVisualStyleBackColor = true;
+            this.buttonCMajorChord.KeyDown += new System.Windows.Forms.KeyEventHandler(this.buttonCMajorChord_KeyDown);
+            this.buttonCMajorChord.KeyUp += new System.Windows.Forms.KeyEventHandler(this.buttonCMajorChord_KeyUp);
+            this.buttonCMajorChord.MouseDown += new System.Windows.Forms.MouseEventHandler(this.buttonCMajorChord_MouseDown);
+            this.buttonCMajorChord.MouseUp += new System.Windows.Forms.MouseEventHandler(this.buttonCMajorChord_MouseUp);
             // 
             // timer1
             // 
