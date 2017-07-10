@@ -37,6 +37,7 @@ namespace OPL3FMInstrumentTester
                 //    }
                 //    return sampleCount;
                 //}
+                //Debug.WriteLine("Read");
                 m_form.synth.getsample(buffer, sampleCount / Marshal.SizeOf(buffer[0].GetType()));
 
                 return sampleCount;
@@ -64,11 +65,6 @@ namespace OPL3FMInstrumentTester
 
             synth = new FMSynth();
             naudioWaveProvider = new SynthWaveOutProvider(this);
-            naudioWaveOut = new NAudio.Wave.WaveOut(this.Handle);
-            naudioWaveOut.NumberOfBuffers = 5;
-            //naudioWaveOut.DesiredLatency = 500;
-            naudioWaveOut.Init(naudioWaveProvider);
-            naudioWaveOut.Play();
             //waveOut = new WinMMWaveOut(2, 44100, 16);
             //waveOut.Open();
         }
@@ -116,7 +112,8 @@ namespace OPL3FMInstrumentTester
 
         private void SetupFMParameters()
         {
-            MainForm mainForm = (MainForm)this.Owner;
+            MdiClient mdiClient = (MdiClient)this.Parent;
+            InstrumentForm mainForm = (InstrumentForm)mdiClient.MdiChildren[0];
 
             TabPage tabPageOp1 = mainForm.tabControl1.TabPages[0];
             ModulatorOperatorPage modOpPage1 = (ModulatorOperatorPage)tabPageOp1.Controls[0];
@@ -237,6 +234,11 @@ namespace OPL3FMInstrumentTester
 
             //waveWriteThread = new Thread(WaveWriteThreadEntry);
             //waveWriteThread.Start();
+            naudioWaveOut = new NAudio.Wave.WaveOut(this.Handle);
+            naudioWaveOut.NumberOfBuffers = 5;
+            //naudioWaveOut.DesiredLatency = 500;
+            naudioWaveOut.Init(naudioWaveProvider);
+            naudioWaveOut.Play();
 
             timer1.Enabled = true;
         }
@@ -277,13 +279,13 @@ namespace OPL3FMInstrumentTester
                 SetupFMParameters();
                 SoundOnSingleNote();
                 watch.Stop();
-                Debug.WriteLine("On: " + watch.ElapsedMilliseconds);
+                //Debug.WriteLine("On: " + watch.ElapsedMilliseconds);
             } else
             {
                 watch.Restart();
                 SoundOffSingleNote();
                 watch.Stop();
-                Debug.WriteLine("Off: " + watch.ElapsedMilliseconds);
+                //Debug.WriteLine("Off: " + watch.ElapsedMilliseconds);
             }
         }
 

@@ -12,29 +12,31 @@ namespace OPL3FMInstrumentTester
 {
     public partial class MainForm : Form
     {
-        PreviewForm previewForm = new PreviewForm();
-
         public MainForm()
         {
             InitializeComponent();
+            //this.MainMenuStrip = new MenuStrip();
         }
 
-        private void mainForm_Load(object sender, EventArgs e)
+        private void MainForm_Load(object sender, EventArgs e)
         {
+            InstrumentForm instrumentForm = new InstrumentForm();
+            instrumentForm.MdiParent = this;
+            instrumentForm.Show();
 
+            InstrumentsListForm instrumentsListForm = new InstrumentsListForm();
+            instrumentsListForm.MdiParent = this;
+            instrumentsListForm.Show();
         }
 
-        private void previewInstrumentToolStripMenuItem_Click(object sender, EventArgs e)
+        private void exitToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (previewForm.IsDisposed)
-            {
-                previewForm = new PreviewForm();
-            }
+            Close();
+        }
 
-            if (!previewForm.Visible)
-            {
-                previewForm.Show(this);
-            }
+        private void openToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            openFileDialogOpenBank.ShowDialog(this);
         }
     }
 }
