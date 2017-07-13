@@ -20,13 +20,9 @@ namespace OPL3FMInstrumentTester
 
         private void MainForm_Load(object sender, EventArgs e)
         {
-            InstrumentForm instrumentForm = new InstrumentForm();
-            instrumentForm.MdiParent = this;
-            instrumentForm.Show();
-
-            InstrumentsListForm instrumentsListForm = new InstrumentsListForm();
-            instrumentsListForm.MdiParent = this;
-            instrumentsListForm.Show();
+            //InstrumentForm instrumentForm = new InstrumentForm();
+            //instrumentForm.MdiParent = this;
+            //instrumentForm.Show();
         }
 
         private void exitToolStripMenuItem_Click(object sender, EventArgs e)
@@ -36,7 +32,13 @@ namespace OPL3FMInstrumentTester
 
         private void openToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            openFileDialogOpenBank.ShowDialog(this);
+            DialogResult dlgResult = openFileDialogOpenBank.ShowDialog(this);
+            if (dlgResult == DialogResult.OK)
+            {
+                InstrumentsListForm instrumentsListForm = new InstrumentsListForm(openFileDialogOpenBank.FileName);
+                instrumentsListForm.MdiParent = this;
+                instrumentsListForm.Show();
+            }
         }
     }
 }

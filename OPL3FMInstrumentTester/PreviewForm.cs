@@ -113,12 +113,12 @@ namespace OPL3FMInstrumentTester
         private void SetupFMParameters()
         {
             MdiClient mdiClient = (MdiClient)this.Parent;
-            InstrumentForm mainForm = (InstrumentForm)mdiClient.MdiChildren[0];
+            InstrumentForm mainForm = (InstrumentForm)mdiClient.MdiChildren[1];
 
-            TabPage tabPageOp1 = mainForm.tabControl1.TabPages[0];
+            TabPage tabPageOp1 = mainForm.tabControlOperators.TabPages[0];
             ModulatorOperatorPage modOpPage1 = (ModulatorOperatorPage)tabPageOp1.Controls[0];
 
-            TabPage tabPageOp2 = mainForm.tabControl1.TabPages[1];
+            TabPage tabPageOp2 = mainForm.tabControlOperators.TabPages[1];
             CarrierOperatorPage modOpPage2 = (CarrierOperatorPage)tabPageOp2.Controls[0];
 
             int ar_dr_op1 = (((int)modOpPage1.numericUpDownAttack.Value & 0xF) << 4) | ((int)modOpPage1.numericUpDownDecay.Value & 0xF);
@@ -129,7 +129,8 @@ namespace OPL3FMInstrumentTester
                 (modOpPage1.checkBoxKSR.Checked ? 1 << 4 : 0 << 4) |
                 ((int)modOpPage1.numericUpDownMultiplier.Value & 0x0F);
             int ksl_tl_op1 = (((int)modOpPage1.numericUpDownKSL.Value & 0x3) << 6) | ((int)modOpPage1.trackBarTotalLevel.Value);
-            int waveform_op1 = ((int)modOpPage1.buttonWaveformSelect.Tag & 0x7);
+            //int waveform_op1 = ((int)modOpPage1.buttonWaveformSelect.Tag & 0x7);
+            int waveform_op1 = ((int)modOpPage1.comboBoxWaveSel.SelectedIndex & 0x7);
 
             int ar_dr_op2 = (((int)modOpPage2.numericUpDownAttack.Value & 0xF) << 4) | ((int)modOpPage2.numericUpDownDecay.Value & 0xF);
             int sr_rr_op2 = (((int)modOpPage2.numericUpDownSustain.Value & 0xF) << 4) | ((int)modOpPage2.numericUpDownRelease.Value & 0xF);
@@ -139,11 +140,15 @@ namespace OPL3FMInstrumentTester
                 (modOpPage2.checkBoxKSR.Checked ? 1 << 4 : 0 << 4) |
                 ((int)modOpPage2.numericUpDownMultiplier.Value & 0x0F);
             int ksl_tl_op2 = (((int)modOpPage2.numericUpDownKSL.Value & 0x3) << 6) | ((int)modOpPage2.trackBarTotalLevel.Value);
-            int waveform_op2 = ((int)modOpPage2.buttonWaveformSelect.Tag & 0x7);
+            //int waveform_op2 = ((int)modOpPage2.buttonWaveformSelect.Tag & 0x7);
+            int waveform_op2 = ((int)modOpPage2.comboBoxWaveSel.SelectedIndex & 0x7);
 
             int fb_alg = (((int)modOpPage2.numericUpDownFeedback.Value & 0x7) << 1) | (modOpPage2.comboBoxSynthesisType.SelectedIndex);
 
             /*Debug.WriteLine(trem_vibr_sust_ksr_mult_op1);*/
+            // Activate OPL3 mode and enable wave select
+            synth.write(0x105, 0x1);
+            synth.write(0x01, 0x20);
 
             for (int c = 0; c < 9; c++)
             {
@@ -161,8 +166,8 @@ namespace OPL3FMInstrumentTester
                 synth.write(0x83 + op_offset[c], (byte)sr_rr_op2);
                 synth.write(0xE3 + op_offset[c], (byte)waveform_op2);
 
-                // Write CH 1 to synthesizer
-                synth.write(0xC0+(uint)c, (byte)fb_alg);
+                // Write CH 1 to synthesizer and enable left and right output
+                synth.write(0xC0+(uint)c, (byte)(fb_alg | 0x30));
             }
         }
 
