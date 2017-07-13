@@ -28,7 +28,6 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(CarrierOperatorPage));
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
             this.label1 = new System.Windows.Forms.Label();
@@ -48,17 +47,19 @@
             this.label5 = new System.Windows.Forms.Label();
             this.numericUpDownMultiplier = new System.Windows.Forms.NumericUpDown();
             this.label7 = new System.Windows.Forms.Label();
-            this.buttonWaveformSelect = new System.Windows.Forms.Button();
-            this.label8 = new System.Windows.Forms.Label();
             this.label9 = new System.Windows.Forms.Label();
-            this.numericUpDownFeedback = new System.Windows.Forms.NumericUpDown();
+            this.label8 = new System.Windows.Forms.Label();
+            this.label10 = new System.Windows.Forms.Label();
             this.comboBoxSynthesisType = new System.Windows.Forms.ComboBox();
+            this.numericUpDownFeedback = new System.Windows.Forms.NumericUpDown();
+            this.numericUpDownKSL = new System.Windows.Forms.NumericUpDown();
             this.tableLayoutPanel5 = new System.Windows.Forms.TableLayoutPanel();
             this.trackBarTotalLevel = new System.Windows.Forms.TrackBar();
             this.label6 = new System.Windows.Forms.Label();
             this.labelTotalLevel = new System.Windows.Forms.Label();
-            this.label10 = new System.Windows.Forms.Label();
-            this.numericUpDownKSL = new System.Windows.Forms.NumericUpDown();
+            this.tableLayoutPanel6 = new System.Windows.Forms.TableLayoutPanel();
+            this.pictureBoxWaveSel = new System.Windows.Forms.PictureBox();
+            this.comboBoxWaveSel = new System.Windows.Forms.ComboBox();
             this.tableLayoutPanel1.SuspendLayout();
             this.tableLayoutPanel2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownAttack)).BeginInit();
@@ -69,9 +70,11 @@
             this.tableLayoutPanel4.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownMultiplier)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownFeedback)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownKSL)).BeginInit();
             this.tableLayoutPanel5.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.trackBarTotalLevel)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownKSL)).BeginInit();
+            this.tableLayoutPanel6.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxWaveSel)).BeginInit();
             this.SuspendLayout();
             // 
             // tableLayoutPanel1
@@ -84,7 +87,7 @@
             this.tableLayoutPanel1.Controls.Add(this.tableLayoutPanel5, 0, 1);
             this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 0);
-            this.tableLayoutPanel1.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.tableLayoutPanel1.Margin = new System.Windows.Forms.Padding(4);
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
             this.tableLayoutPanel1.RowCount = 2;
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
@@ -107,7 +110,7 @@
             this.tableLayoutPanel2.Controls.Add(this.numericUpDownRelease, 1, 3);
             this.tableLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanel2.Location = new System.Drawing.Point(4, 4);
-            this.tableLayoutPanel2.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.tableLayoutPanel2.Margin = new System.Windows.Forms.Padding(4);
             this.tableLayoutPanel2.Name = "tableLayoutPanel2";
             this.tableLayoutPanel2.RowCount = 4;
             this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 25F));
@@ -143,7 +146,7 @@
             // 
             this.numericUpDownAttack.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.numericUpDownAttack.Location = new System.Drawing.Point(106, 34);
-            this.numericUpDownAttack.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.numericUpDownAttack.Margin = new System.Windows.Forms.Padding(4);
             this.numericUpDownAttack.Maximum = new decimal(new int[] {
             15,
             0,
@@ -157,7 +160,7 @@
             // 
             this.numericUpDownDecay.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.numericUpDownDecay.Location = new System.Drawing.Point(106, 125);
-            this.numericUpDownDecay.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.numericUpDownDecay.Margin = new System.Windows.Forms.Padding(4);
             this.numericUpDownDecay.Maximum = new decimal(new int[] {
             15,
             0,
@@ -182,7 +185,7 @@
             // 
             this.numericUpDownSustain.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.numericUpDownSustain.Location = new System.Drawing.Point(106, 216);
-            this.numericUpDownSustain.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.numericUpDownSustain.Margin = new System.Windows.Forms.Padding(4);
             this.numericUpDownSustain.Maximum = new decimal(new int[] {
             15,
             0,
@@ -207,7 +210,7 @@
             // 
             this.numericUpDownRelease.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.numericUpDownRelease.Location = new System.Drawing.Point(106, 308);
-            this.numericUpDownRelease.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.numericUpDownRelease.Margin = new System.Windows.Forms.Padding(4);
             this.numericUpDownRelease.Maximum = new decimal(new int[] {
             15,
             0,
@@ -227,16 +230,16 @@
             this.tableLayoutPanel3.Controls.Add(this.label5, 0, 0);
             this.tableLayoutPanel3.Controls.Add(this.numericUpDownMultiplier, 1, 0);
             this.tableLayoutPanel3.Controls.Add(this.label7, 0, 2);
-            this.tableLayoutPanel3.Controls.Add(this.buttonWaveformSelect, 1, 2);
             this.tableLayoutPanel3.Controls.Add(this.label9, 0, 5);
             this.tableLayoutPanel3.Controls.Add(this.label8, 0, 4);
             this.tableLayoutPanel3.Controls.Add(this.label10, 0, 3);
             this.tableLayoutPanel3.Controls.Add(this.comboBoxSynthesisType, 1, 5);
             this.tableLayoutPanel3.Controls.Add(this.numericUpDownFeedback, 1, 4);
             this.tableLayoutPanel3.Controls.Add(this.numericUpDownKSL, 1, 3);
+            this.tableLayoutPanel3.Controls.Add(this.tableLayoutPanel6, 1, 2);
             this.tableLayoutPanel3.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanel3.Location = new System.Drawing.Point(453, 4);
-            this.tableLayoutPanel3.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.tableLayoutPanel3.Margin = new System.Windows.Forms.Padding(4);
             this.tableLayoutPanel3.Name = "tableLayoutPanel3";
             this.tableLayoutPanel3.RowCount = 6;
             this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle());
@@ -261,12 +264,12 @@
             this.tableLayoutPanel4.Controls.Add(this.checkBoxKSR, 1, 1);
             this.tableLayoutPanel4.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanel4.Location = new System.Drawing.Point(4, 34);
-            this.tableLayoutPanel4.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.tableLayoutPanel4.Margin = new System.Windows.Forms.Padding(4);
             this.tableLayoutPanel4.Name = "tableLayoutPanel4";
             this.tableLayoutPanel4.RowCount = 2;
             this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutPanel4.Size = new System.Drawing.Size(499, 58);
+            this.tableLayoutPanel4.Size = new System.Drawing.Size(499, 61);
             this.tableLayoutPanel4.TabIndex = 0;
             // 
             // checkBoxTremolo
@@ -274,7 +277,7 @@
             this.checkBoxTremolo.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.checkBoxTremolo.AutoSize = true;
             this.checkBoxTremolo.Location = new System.Drawing.Point(4, 4);
-            this.checkBoxTremolo.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.checkBoxTremolo.Margin = new System.Windows.Forms.Padding(4);
             this.checkBoxTremolo.Name = "checkBoxTremolo";
             this.checkBoxTremolo.Size = new System.Drawing.Size(82, 21);
             this.checkBoxTremolo.TabIndex = 3;
@@ -286,7 +289,7 @@
             this.checkBoxVibrato.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.checkBoxVibrato.AutoSize = true;
             this.checkBoxVibrato.Location = new System.Drawing.Point(94, 4);
-            this.checkBoxVibrato.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.checkBoxVibrato.Margin = new System.Windows.Forms.Padding(4);
             this.checkBoxVibrato.Name = "checkBoxVibrato";
             this.checkBoxVibrato.Size = new System.Drawing.Size(401, 21);
             this.checkBoxVibrato.TabIndex = 4;
@@ -297,8 +300,8 @@
             // 
             this.checkBoxSustain.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.checkBoxSustain.AutoSize = true;
-            this.checkBoxSustain.Location = new System.Drawing.Point(4, 33);
-            this.checkBoxSustain.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.checkBoxSustain.Location = new System.Drawing.Point(4, 34);
+            this.checkBoxSustain.Margin = new System.Windows.Forms.Padding(4);
             this.checkBoxSustain.Name = "checkBoxSustain";
             this.checkBoxSustain.Size = new System.Drawing.Size(82, 21);
             this.checkBoxSustain.TabIndex = 5;
@@ -309,8 +312,8 @@
             // 
             this.checkBoxKSR.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.checkBoxKSR.AutoSize = true;
-            this.checkBoxKSR.Location = new System.Drawing.Point(94, 33);
-            this.checkBoxKSR.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.checkBoxKSR.Location = new System.Drawing.Point(94, 34);
+            this.checkBoxKSR.Margin = new System.Windows.Forms.Padding(4);
             this.checkBoxKSR.Name = "checkBoxKSR";
             this.checkBoxKSR.Size = new System.Drawing.Size(401, 21);
             this.checkBoxKSR.TabIndex = 6;
@@ -332,7 +335,7 @@
             // 
             this.numericUpDownMultiplier.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.numericUpDownMultiplier.Location = new System.Drawing.Point(147, 4);
-            this.numericUpDownMultiplier.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.numericUpDownMultiplier.Margin = new System.Windows.Forms.Padding(4);
             this.numericUpDownMultiplier.Maximum = new decimal(new int[] {
             15,
             0,
@@ -346,37 +349,12 @@
             // 
             this.label7.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(4, 177);
+            this.label7.Location = new System.Drawing.Point(4, 178);
             this.label7.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label7.Name = "label7";
             this.label7.Size = new System.Drawing.Size(135, 17);
             this.label7.TabIndex = 3;
             this.label7.Text = "Waveform";
-            // 
-            // buttonWaveformSelect
-            // 
-            this.buttonWaveformSelect.AutoSize = true;
-            this.buttonWaveformSelect.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.buttonWaveformSelect.Image = ((System.Drawing.Image)(resources.GetObject("buttonWaveformSelect.Image")));
-            this.buttonWaveformSelect.Location = new System.Drawing.Point(147, 100);
-            this.buttonWaveformSelect.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
-            this.buttonWaveformSelect.Name = "buttonWaveformSelect";
-            this.buttonWaveformSelect.Size = new System.Drawing.Size(356, 171);
-            this.buttonWaveformSelect.TabIndex = 4;
-            this.buttonWaveformSelect.Text = "buttonWaveformSelect";
-            this.buttonWaveformSelect.UseVisualStyleBackColor = true;
-            this.buttonWaveformSelect.Click += new System.EventHandler(this.buttonWaveformSelect_Click);
-            // 
-            // label8
-            // 
-            this.label8.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
-            this.label8.AutoSize = true;
-            this.label8.Location = new System.Drawing.Point(4, 309);
-            this.label8.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-            this.label8.Name = "label8";
-            this.label8.Size = new System.Drawing.Size(135, 17);
-            this.label8.TabIndex = 5;
-            this.label8.Text = "Feedback";
             // 
             // label9
             // 
@@ -389,19 +367,26 @@
             this.label9.TabIndex = 6;
             this.label9.Text = "Synthesis Type";
             // 
-            // numericUpDownFeedback
+            // label8
             // 
-            this.numericUpDownFeedback.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
-            this.numericUpDownFeedback.Location = new System.Drawing.Point(147, 307);
-            this.numericUpDownFeedback.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
-            this.numericUpDownFeedback.Maximum = new decimal(new int[] {
-            7,
-            0,
-            0,
-            0});
-            this.numericUpDownFeedback.Name = "numericUpDownFeedback";
-            this.numericUpDownFeedback.Size = new System.Drawing.Size(356, 22);
-            this.numericUpDownFeedback.TabIndex = 7;
+            this.label8.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+            this.label8.AutoSize = true;
+            this.label8.Location = new System.Drawing.Point(4, 309);
+            this.label8.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label8.Name = "label8";
+            this.label8.Size = new System.Drawing.Size(135, 17);
+            this.label8.TabIndex = 5;
+            this.label8.Text = "Feedback";
+            // 
+            // label10
+            // 
+            this.label10.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+            this.label10.AutoSize = true;
+            this.label10.Location = new System.Drawing.Point(3, 280);
+            this.label10.Name = "label10";
+            this.label10.Size = new System.Drawing.Size(137, 17);
+            this.label10.TabIndex = 9;
+            this.label10.Text = "Key Scale Level";
             // 
             // comboBoxSynthesisType
             // 
@@ -412,10 +397,32 @@
             "FM",
             "AM"});
             this.comboBoxSynthesisType.Location = new System.Drawing.Point(147, 337);
-            this.comboBoxSynthesisType.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.comboBoxSynthesisType.Margin = new System.Windows.Forms.Padding(4);
             this.comboBoxSynthesisType.Name = "comboBoxSynthesisType";
             this.comboBoxSynthesisType.Size = new System.Drawing.Size(356, 24);
             this.comboBoxSynthesisType.TabIndex = 8;
+            // 
+            // numericUpDownFeedback
+            // 
+            this.numericUpDownFeedback.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+            this.numericUpDownFeedback.Location = new System.Drawing.Point(147, 307);
+            this.numericUpDownFeedback.Margin = new System.Windows.Forms.Padding(4);
+            this.numericUpDownFeedback.Maximum = new decimal(new int[] {
+            7,
+            0,
+            0,
+            0});
+            this.numericUpDownFeedback.Name = "numericUpDownFeedback";
+            this.numericUpDownFeedback.Size = new System.Drawing.Size(356, 22);
+            this.numericUpDownFeedback.TabIndex = 7;
+            // 
+            // numericUpDownKSL
+            // 
+            this.numericUpDownKSL.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+            this.numericUpDownKSL.Location = new System.Drawing.Point(146, 278);
+            this.numericUpDownKSL.Name = "numericUpDownKSL";
+            this.numericUpDownKSL.Size = new System.Drawing.Size(358, 22);
+            this.numericUpDownKSL.TabIndex = 10;
             // 
             // tableLayoutPanel5
             // 
@@ -429,7 +436,7 @@
             this.tableLayoutPanel5.Controls.Add(this.label6, 0, 0);
             this.tableLayoutPanel5.Controls.Add(this.labelTotalLevel, 1, 1);
             this.tableLayoutPanel5.Location = new System.Drawing.Point(4, 377);
-            this.tableLayoutPanel5.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.tableLayoutPanel5.Margin = new System.Windows.Forms.Padding(4);
             this.tableLayoutPanel5.Name = "tableLayoutPanel5";
             this.tableLayoutPanel5.RowCount = 2;
             this.tableLayoutPanel5.RowStyles.Add(new System.Windows.Forms.RowStyle());
@@ -442,12 +449,13 @@
             // 
             this.trackBarTotalLevel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.trackBarTotalLevel.Location = new System.Drawing.Point(4, 21);
-            this.trackBarTotalLevel.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.trackBarTotalLevel.Margin = new System.Windows.Forms.Padding(4);
             this.trackBarTotalLevel.Maximum = 63;
             this.trackBarTotalLevel.Name = "trackBarTotalLevel";
             this.trackBarTotalLevel.Size = new System.Drawing.Size(924, 56);
             this.trackBarTotalLevel.TabIndex = 3;
             this.trackBarTotalLevel.Scroll += new System.EventHandler(this.trackBarTotalLevel_Scroll);
+            this.trackBarTotalLevel.ValueChanged += new System.EventHandler(this.trackBarTotalLevel_Scroll);
             // 
             // label6
             // 
@@ -471,30 +479,59 @@
             this.labelTotalLevel.TabIndex = 4;
             this.labelTotalLevel.Text = "0";
             // 
-            // label10
+            // tableLayoutPanel6
             // 
-            this.label10.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
-            this.label10.AutoSize = true;
-            this.label10.Location = new System.Drawing.Point(3, 280);
-            this.label10.Name = "label10";
-            this.label10.Size = new System.Drawing.Size(137, 17);
-            this.label10.TabIndex = 9;
-            this.label10.Text = "Key Scale Level";
+            this.tableLayoutPanel6.AutoSize = true;
+            this.tableLayoutPanel6.ColumnCount = 1;
+            this.tableLayoutPanel6.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+            this.tableLayoutPanel6.Controls.Add(this.pictureBoxWaveSel, 0, 0);
+            this.tableLayoutPanel6.Controls.Add(this.comboBoxWaveSel, 0, 1);
+            this.tableLayoutPanel6.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tableLayoutPanel6.Location = new System.Drawing.Point(146, 102);
+            this.tableLayoutPanel6.Name = "tableLayoutPanel6";
+            this.tableLayoutPanel6.RowCount = 2;
+            this.tableLayoutPanel6.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tableLayoutPanel6.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tableLayoutPanel6.Size = new System.Drawing.Size(358, 170);
+            this.tableLayoutPanel6.TabIndex = 11;
             // 
-            // numericUpDownKSL
+            // pictureBoxWaveSel
             // 
-            this.numericUpDownKSL.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
-            this.numericUpDownKSL.Location = new System.Drawing.Point(146, 278);
-            this.numericUpDownKSL.Name = "numericUpDownKSL";
-            this.numericUpDownKSL.Size = new System.Drawing.Size(358, 22);
-            this.numericUpDownKSL.TabIndex = 10;
+            this.pictureBoxWaveSel.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.pictureBoxWaveSel.Image = global::OPL3FMInstrumentTester.Properties.Resources.wave0;
+            this.pictureBoxWaveSel.Location = new System.Drawing.Point(48, 3);
+            this.pictureBoxWaveSel.Name = "pictureBoxWaveSel";
+            this.pictureBoxWaveSel.Size = new System.Drawing.Size(261, 133);
+            this.pictureBoxWaveSel.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize;
+            this.pictureBoxWaveSel.TabIndex = 0;
+            this.pictureBoxWaveSel.TabStop = false;
+            // 
+            // comboBoxWaveSel
+            // 
+            this.comboBoxWaveSel.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.comboBoxWaveSel.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboBoxWaveSel.FormattingEnabled = true;
+            this.comboBoxWaveSel.Items.AddRange(new object[] {
+            "0",
+            "1",
+            "2",
+            "3",
+            "4",
+            "5",
+            "6",
+            "7"});
+            this.comboBoxWaveSel.Location = new System.Drawing.Point(3, 142);
+            this.comboBoxWaveSel.Name = "comboBoxWaveSel";
+            this.comboBoxWaveSel.Size = new System.Drawing.Size(352, 24);
+            this.comboBoxWaveSel.TabIndex = 1;
+            this.comboBoxWaveSel.SelectedIndexChanged += new System.EventHandler(this.comboBoxWaveSel_SelectedIndexChanged);
             // 
             // CarrierOperatorPage
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.tableLayoutPanel1);
-            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.Margin = new System.Windows.Forms.Padding(4);
             this.Name = "CarrierOperatorPage";
             this.Size = new System.Drawing.Size(964, 448);
             this.tableLayoutPanel1.ResumeLayout(false);
@@ -511,10 +548,13 @@
             this.tableLayoutPanel4.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownMultiplier)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownFeedback)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownKSL)).EndInit();
             this.tableLayoutPanel5.ResumeLayout(false);
             this.tableLayoutPanel5.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.trackBarTotalLevel)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownKSL)).EndInit();
+            this.tableLayoutPanel6.ResumeLayout(false);
+            this.tableLayoutPanel6.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxWaveSel)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -533,7 +573,6 @@
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel5;
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.Label label7;
-        private System.Windows.Forms.Label labelTotalLevel;
         private System.Windows.Forms.Label label8;
         private System.Windows.Forms.Label label9;
         private System.Windows.Forms.Label label10;
@@ -547,9 +586,12 @@
         public System.Windows.Forms.CheckBox checkBoxVibrato;
         public System.Windows.Forms.CheckBox checkBoxSustain;
         public System.Windows.Forms.CheckBox checkBoxKSR;
-        public System.Windows.Forms.Button buttonWaveformSelect;
         public System.Windows.Forms.NumericUpDown numericUpDownFeedback;
         public System.Windows.Forms.ComboBox comboBoxSynthesisType;
         public System.Windows.Forms.TrackBar trackBarTotalLevel;
+        public System.Windows.Forms.Label labelTotalLevel;
+        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel6;
+        private System.Windows.Forms.PictureBox pictureBoxWaveSel;
+        public System.Windows.Forms.ComboBox comboBoxWaveSel;
     }
 }

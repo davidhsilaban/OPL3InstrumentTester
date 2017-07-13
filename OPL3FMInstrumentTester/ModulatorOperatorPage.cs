@@ -16,12 +16,7 @@ namespace OPL3FMInstrumentTester
         {
             InitializeComponent();
 
-            buttonWaveformSelect.Tag = 0;
-        }
-
-        private void buttonWaveformSelect_Click(object sender, EventArgs e)
-        {
-
+            //pictureBoxWaveSel.Tag = 0;
         }
 
         private void trackBarTotalLevel_Scroll(object sender, EventArgs e)
@@ -37,6 +32,48 @@ namespace OPL3FMInstrumentTester
         private void flowLayoutPanel1_Paint(object sender, PaintEventArgs e)
         {
 
+        }
+
+        private void comboBoxWaveSel_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            switch (comboBoxWaveSel.SelectedIndex)
+            {
+                case 0:
+                    pictureBoxWaveSel.Image = OPL3FMInstrumentTester.Properties.Resources.wave0;
+                    break;
+
+                case 1:
+                    pictureBoxWaveSel.Image = OPL3FMInstrumentTester.Properties.Resources.wave1;
+                    break;
+
+                case 2:
+                    pictureBoxWaveSel.Image = OPL3FMInstrumentTester.Properties.Resources.wave2;
+                    break;
+
+                case 3:
+                    pictureBoxWaveSel.Image = OPL3FMInstrumentTester.Properties.Resources.wave3;
+                    break;
+
+                case 4:
+                    pictureBoxWaveSel.Image = OPL3FMInstrumentTester.Properties.Resources.wave4;
+                    break;
+
+                case 5:
+                    pictureBoxWaveSel.Image = OPL3FMInstrumentTester.Properties.Resources.wave5;
+                    break;
+
+                case 6:
+                    pictureBoxWaveSel.Image = OPL3FMInstrumentTester.Properties.Resources.wave6;
+                    break;
+
+                case 7:
+                    pictureBoxWaveSel.Image = OPL3FMInstrumentTester.Properties.Resources.wave7;
+                    break;
+
+                default:
+                    pictureBoxWaveSel.Image = OPL3FMInstrumentTester.Properties.Resources.wave0;
+                    break;
+            }
         }
     }
 }

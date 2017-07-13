@@ -117,27 +117,4 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
-  <data name="buttonWaveformSelect.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
-    <value>
-        R0lGODlhBQGFAIMAAAAAAL8AAAC/AL+/AAAAv78AvwC/v8DAwICAgP8AAAD/AP//AAAA//8A/wD/////
-        /yH/C05FVFNDQVBFMi4wAwEBAAAh+QQAAAAAACwAAAAABQGFAAAI/wAfCBxIsKDBgwgTKlzIsKHDhxAj
-        SpxIsaLFgwguatzIsaPHjyBDQkSQ8QGAkyhTqlzJsqXLlzBjypxJs6bNmzhz6tyZkqRAnkCDCh1KtKjR
-        ozN9mkTKtKnTp1CjwlQqtarVq1iztqSqtavXr2B1cg1LtqxZsGPPql3LFmnatnDjyqX5dq7du3br4t3L
-        16zevoADY/0ruLBhpoQPK17MMzHjx5BlOo5MuTLKyUMFCLDMGW1Jp5o1nwzdOWro05spY84pumXq0khb
-        r5TNePXN1y5xw84cU/dh2zV9uxa+Gyftl8QDA5+ZvHhsm835Lu99O7rz3MYXT0d+Xap17L8/g5b93r38
-        VvFByYM3z32nerjbWb5nnx3o/LXxVd53TR904fzP9ZfSfqqhpxOBAl6FYFgABijggpA1CGGC/Bk1YVcN
-        OkghURdmBWCH8tEHonYGbmjZiFXlh+Js5q0Y3k/1mXiXi09l2BSNceH4X4nMyciXjm7xaBaQahGpnJAw
-        GenjUUoOZaN/sDXZ15NLyiUlUMtdOVppWu7/RWWVOeaFZIVgHlgmAF/eeGZntnUZpVdu3pSmmmtWtlqc
-        ddon15x0PoYnXnzmOWRcmP15Yp6BMmXooW1Ntqigdo7J1qNCUTqXY5ZCylqjkk56WKZ7dqqpYaBeJmmp
-        iqEKn6hrqfopfmO6OqphiT4la5Kj/nXrrDSVWuuSu8IKY1/B8rqSXsX+aBeov9pqrJc8JruXtJk2++yG
-        b0kLgLZ4WWptgtz6ZWC44S5L1rf9lVvWWOqqiyir17r7KFfubnstofAaW6+9X6EL1b5g+tsdwPximO+9
-        zwrsbFkEb2nwsKkirJbCuzWMEp4ULyzxuQcLavGAWmW88W4iQ6nVxwx2BTzjyCAP/6Yyy+/+hHLBVs2s
-        n8sQ32szi1YptTPMDy9F2ZU/8yxVyaYBjbPQ8V4nJdJJa+yckZtBrXSELyvb58BQWh311Q56LVjRMtGI
-        m9j/MglujVkDRnZXKOqGttZgm5pzZyC+DR1vKs39tXvApseS33+zDCFxhBe+N5gIJpe44j0C3dzjkOO6
-        5oqUV07m5eodd2zbi3k+m95Fffdd5lUlJ3qeq29LHuqpn+Y66aCJhlpNsGdFe+pigV63ibn/Hurdwufq
-        e/ECBo88W8ovP/HxzpvXfPTrQk/9ddNf7xnx2gdsffewZQ9+yN+Pz5n45l/lE0nst+/++/DHL//89Ndv
-        //345xiv//789+///wAMoAAHSMACGvCACBxgQAAAOw==
-</value>
-  </data>
 </root>
