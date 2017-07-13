@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 namespace OPL3FMInstrumentTester
 {
     [StructLayout(LayoutKind.Sequential, Pack = 16)]
-    class IBKInstrument
+    struct IBKInstrument
     {
         public Byte iModChar;
         public Byte iCarChar;
@@ -21,6 +21,9 @@ namespace OPL3FMInstrumentTester
         public Byte iModWaveSel;
         public Byte iCarWaveSel;
         public Byte iFeedback;
-        //Byte[] Padding;
+        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 5)]
+        Byte[] Padding;
+
+        public Byte ModChar { get { return iModChar; } }
     }
 }
